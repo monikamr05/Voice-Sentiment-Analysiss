@@ -1,4 +1,3 @@
-# Web Framework & Production Server
 gunicorn
 flask>=3.0.0
 werkzeug>=3.0.0
