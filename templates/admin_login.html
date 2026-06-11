@@ -1,0 +1,28 @@
+{% extends "auth_layout.html" %}
+{% block title %}Admin Login{% endblock %}
+{% block auth_subtitle %}Administrator access only{% endblock %}
+
+{% block auth_content %}
+<div class="alert alert-info border-0 small py-2 mb-3">
+    <i class="bi bi-shield-check me-1"></i>
+    Default: username <strong>admin</strong> / password <strong>admin123</strong>
+</div>
+<form method="POST" action="{{ url_for('admin_login') }}">
+    <input type="hidden" name="next" value="{{ next_url }}">
+    <div class="mb-3">
+        <label class="form-label fw-semibold">Admin Username</label>
+        <input type="text" name="username" class="form-control form-control-lg" required autofocus>
+    </div>
+    <div class="mb-4">
+        <label class="form-label fw-semibold">Password</label>
+        <input type="password" name="password" class="form-control form-control-lg" required>
+    </div>
+    <button type="submit" class="btn btn-dark btn-analyze w-100 mb-3">
+        <i class="bi bi-shield-lock me-2"></i>Admin Login
+    </button>
+</form>
+<hr>
+<p class="text-center small mb-0">
+    <a href="{{ url_for('login') }}"><i class="bi bi-person me-1"></i>User Login</a>
+</p>
+{% endblock %}

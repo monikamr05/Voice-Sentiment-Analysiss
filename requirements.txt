@@ -1,0 +1,23 @@
+# Web Framework
+flask>=3.0.0
+werkzeug>=3.0.0
+gunicorn>=21.0.0
+
+# Audio Processing
+librosa>=0.10.0
+soundfile>=0.12.0
+audioread>=3.0.0
+
+# ML & Data Processing
+numpy>=1.24.0,<2.0.0
+scipy>=1.11.0
+scikit-learn>=1.3.0
+h5py>=3.8.0
+
+# Visualization & Reporting
+matplotlib>=3.7.0
+reportlab>=4.0.0
+
+# Optional: only needed to train the model locally (python train_model.py)
+# tensorflow>=2.15.0
+# seaborn>=0.13.0

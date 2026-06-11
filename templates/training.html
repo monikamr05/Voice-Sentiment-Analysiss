@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Training Results - Voice Sentiment Analysis{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4"><i class="bi bi-graph-up-arrow text-primary"></i> Model Training Results</h2>
+
+    {% if not model_ready %}
+    <div class="alert alert-warning">
+        No trained model found. Add RAVDESS audio to <code>dataset/</code> and run <code>python train_model.py</code>.
+    </div>
+    {% endif %}
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-bold">Accuracy & Loss</div>
+                <div class="card-body text-center">
+                    {% if has_history %}
+                    <img src="{{ url_for('static', filename='plots/training_history.png') }}" alt="Training History" class="img-fluid rounded">
+                    {% else %}
+                    <p class="text-muted py-5">Train the model to generate this chart.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-bold">Confusion Matrix</div>
+                <div class="card-body text-center">
+                    {% if has_cm %}
+                    <img src="{{ url_for('static', filename='plots/confusion_matrix.png') }}" alt="Confusion Matrix" class="img-fluid rounded">
+                    {% else %}
+                    <p class="text-muted py-5">Train the model to generate this chart.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if report_text %}
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-white fw-bold">Classification Report</div>
+        <div class="card-body">
+            <pre class="mb-0 small">{{ report_text }}</pre>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

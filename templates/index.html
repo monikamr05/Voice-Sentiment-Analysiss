@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}Home - Voice Sentiment Analysis{% endblock %}
+
+{% block content %}
+<section class="hero-section text-white py-5">
+    <div class="container py-5 position-relative">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-5 fw-bold mb-3">Voice Call Sentiment Analysis</h1>
+                <p class="lead mb-4 opacity-75">
+                    Upload a voice recording and instantly detect emotion and sentiment —
+                    Positive, Neutral, or Negative — powered by AI.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    {% if session.get('user_id') %}
+                    <a href="{{ url_for('upload') }}" class="btn btn-light btn-hero">
+                        <i class="bi bi-cloud-upload me-2"></i>Analyze Now
+                    </a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light btn-hero">
+                        <i class="bi bi-bar-chart me-2"></i>My Dashboard
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-light btn-hero">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                    </a>
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-hero">
+                        <i class="bi bi-person-plus me-2"></i>Register
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-5 text-center mt-5 mt-lg-0">
+                <div class="hero-card p-5 rounded-4 shadow-lg">
+                    <div class="hero-visual mb-3">
+                        <i class="bi bi-soundwave"></i>
+                    </div>
+                    <h5 class="text-dark fw-semibold mb-1">AI-Powered Analysis</h5>
+                    <p class="text-muted small mb-0">Real-time emotion detection from speech audio</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">How It Works</h2>
+            <p class="text-muted">Three simple steps to analyze voice sentiment</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-circle primary mb-3">
+                            <i class="bi bi-file-earmark-music"></i>
+                        </div>
+                        <h5 class="fw-semibold">Upload Audio</h5>
+                        <p class="text-muted small mb-0">Drag & drop a WAV or MP3 from your voice call or recording.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-circle success mb-3">
+                            <i class="bi bi-cpu"></i>
+                        </div>
+                        <h5 class="fw-semibold">AI Processing</h5>
+                        <p class="text-muted small mb-0">Deep learning analyzes speech patterns and emotional tone.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-circle info mb-3">
+                            <i class="bi bi-emoji-smile"></i>
+                        </div>
+                        <h5 class="fw-semibold">Get Results</h5>
+                        <p class="text-muted small mb-0">Sentiment scores, charts, history, and PDF reports.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if stats and stats.total > 0 %}
+<section class="py-5 bg-white">
+    <div class="container">
+        <h3 class="fw-bold mb-4 text-center">Your Analytics</h3>
+        <div class="row g-3">
+            <div class="col-6 col-md-3">
+                <div class="stat-box text-white" style="background: linear-gradient(135deg, #4f46e5, #6366f1);">
+                    <h2>{{ stats.total }}</h2>
+                    <span>Total Analyzed</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-box text-white" style="background: linear-gradient(135deg, #059669, #10b981);">
+                    <h2>{{ stats.by_sentiment.get('Positive', 0) }}</h2>
+                    <span>Positive</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-box text-dark" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">
+                    <h2>{{ stats.by_sentiment.get('Neutral', 0) }}</h2>
+                    <span>Neutral</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-box text-white" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
+                    <h2>{{ stats.by_sentiment.get('Negative', 0) }}</h2>
+                    <span>Negative</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

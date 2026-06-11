@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="page-header d-flex flex-wrap justify-content-between align-items-end gap-3">
+        <div>
+            <h1><i class="bi bi-shield-lock text-danger"></i> Admin Dashboard</h1>
+            <p class="mb-0">Welcome, <strong>{{ session.username }}</strong> — full system overview</p>
+        </div>
+        <span class="badge bg-danger fs-6">Administrator</span>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="stat-box text-white" style="background: linear-gradient(135deg, #4f46e5, #6366f1);">
+                <h2>{{ stats.total }}</h2>
+                <span>Total Predictions</span>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-box text-white" style="background: linear-gradient(135deg, #0f766e, #14b8a6);">
+                <h2>{{ stats.user_count }}</h2>
+                <span>Registered Users</span>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-box text-white" style="background: linear-gradient(135deg, #059669, #10b981);">
+                <h2>{{ stats.by_sentiment.get('Positive', 0) }}</h2>
+                <span>Positive</span>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-box text-white" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
+                <h2>{{ stats.by_sentiment.get('Negative', 0) }}</h2>
+                <span>Negative</span>
+            </div>
+        </div>
+    </div>
+
+    {% if stats.low_confidence_count %}
+    <div class="alert alert-warning border-0 shadow-sm mb-4">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        <strong>{{ stats.low_confidence_count }}</strong> predictions need manual review (confidence &lt; {{ confidence_threshold }}%).
+    </div>
+    {% endif %}
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white fw-bold">Sentiment Distribution (All Users)</div>
+                <div class="card-body"><canvas id="sentimentChart" height="220"></canvas></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white fw-bold">Emotion Distribution</div>
+                <div class="card-body"><canvas id="emotionChart" height="220"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-bold"><i class="bi bi-people me-1"></i> Users</div>
+                <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
+                    <table class="table table-sm table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Predictions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in users %}
+                            <tr>
+                                <td>{{ u.username }}</td>
+                                <td>
+                                    {% if u.role == 'admin' %}
+                                    <span class="badge bg-danger">Admin</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">User</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ u.prediction_count }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <span class="fw-bold"><i class="bi bi-clock-history me-1"></i> All Predictions</span>
+                    <a href="{{ url_for('export_csv') }}" class="btn btn-sm btn-success">Export CSV</a>
+                </div>
+                <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
+                    <table class="table table-sm table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>File</th>
+                                <th>Sentiment</th>
+                                <th>Conf.</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in predictions %}
+                            <tr>
+                                <td>{{ p.id }}</td>
+                                <td>{{ p.owner_username or '—' }}</td>
+                                <td class="text-truncate" style="max-width:100px">{{ p.filename }}</td>
+                                <td><span class="badge sentiment-badge-{{ p.sentiment.lower() }}">{{ p.sentiment }}</span></td>
+                                <td>{{ "%.0f"|format(p.confidence) }}%</td>
+                                <td>
+                                    <a href="{{ url_for('download_report', pred_id=p.id) }}" class="btn btn-sm btn-outline-secondary">PDF</a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="6" class="text-muted text-center py-4">No predictions yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-white fw-bold"><i class="bi bi-folder me-1"></i> Recent Uploads</div>
+        <ul class="list-group list-group-flush" style="max-height: 200px; overflow-y: auto;">
+            {% for f in uploads %}
+            <li class="list-group-item small"><i class="bi bi-file-music text-primary me-2"></i>{{ f }}</li>
+            {% else %}
+            <li class="list-group-item text-muted">No uploads.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+const sentimentData = {{ stats.by_sentiment | tojson }};
+const emotionData = {{ stats.by_emotion | tojson }};
+document.addEventListener('DOMContentLoaded', () => {
+    renderDashboardCharts(sentimentData, emotionData);
+});
+</script>
+{% endblock %}

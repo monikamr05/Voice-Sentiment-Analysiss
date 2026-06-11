@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Analyze Audio - Voice Sentiment Analysis{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="page-header text-center">
+                <h1><i class="bi bi-cloud-upload text-primary"></i> Analyze Voice</h1>
+                <p>Upload a voice audio file for sentiment analysis</p>
+            </div>
+
+            {% if not model_ready %}
+            <div class="alert alert-warning border-0 shadow-sm text-center mb-4">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                AI model is not ready. Run <code>python train_model.py</code> first.
+            </div>
+            {% endif %}
+
+            <div class="upload-card">
+                <form id="uploadForm" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+                    <div id="dropZone" class="drop-zone p-4 text-center mb-3">
+                        <div class="drop-zone-icon mb-3">
+                            <i class="bi bi-file-earmark-music"></i>
+                        </div>
+                        <h6 class="fw-semibold mb-2">Drag & Drop Audio Here</h6>
+                        <p class="text-muted small mb-3">WAV, MP3, OGG, or FLAC — max 16 MB</p>
+                        <input type="file" name="audio" id="audioInput" accept=".wav,.mp3,.ogg,.flac,.m4a" hidden>
+                        <button type="button" class="btn btn-outline-primary rounded-pill px-4" id="browseBtn">Browse Files</button>
+                    </div>
+
+                    <div id="previewSection" class="d-none mb-3">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body">
+                                <h6 class="fw-semibold mb-2"><i class="bi bi-play-circle me-1"></i> Preview</h6>
+                                <p id="fileName" class="text-muted small mb-2"></p>
+                                <audio id="audioPreview" controls class="w-100"></audio>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn btn-primary btn-analyze w-100" disabled>
+                        <span id="submitText"><i class="bi bi-stars me-2"></i>Analyze Sentiment</span>
+                        <span id="submitSpinner" class="d-none">
+                            <span class="spinner-border spinner-border-sm me-2"></span>Analyzing...
+                        </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', initUploadPage);
+</script>
+{% endblock %}

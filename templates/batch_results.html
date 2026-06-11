@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Batch Results - Voice Sentiment Analysis{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="page-header">
+        <h1><i class="bi bi-collection text-primary"></i> Batch Analysis Results</h1>
+        <p>{{ results|length }} file(s) processed</p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>File</th>
+                        <th>Emotion</th>
+                        <th>Sentiment</th>
+                        <th>Confidence</th>
+                        <th>Status</th>
+                        <th>Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in results %}
+                    <tr>
+                        <td class="text-truncate" style="max-width:180px">{{ r.filename }}</td>
+                        {% if r.error %}
+                        <td colspan="3" class="text-danger">{{ r.error }}</td>
+                        <td><span class="badge bg-danger">Failed</span></td>
+                        <td>—</td>
+                        {% else %}
+                        <td class="text-capitalize">{{ r.emotion }}</td>
+                        <td>
+                            <span class="badge sentiment-badge-{{ r.sentiment.lower() }}">{{ r.sentiment }}</span>
+                        </td>
+                        <td>{{ "%.1f"|format(r.confidence) }}%</td>
+                        <td>
+                            {% if r.low_confidence %}
+                            <span class="badge bg-warning text-dark">Review</span>
+                            {% else %}
+                            <span class="badge bg-success">OK</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('download_report', pred_id=r.pred_id) }}" class="btn btn-sm btn-outline-primary">
+                                PDF
+                            </a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <a href="{{ url_for('upload') }}" class="btn btn-primary">Analyze More</a>
+        <a href="{{ url_for('results') }}" class="btn btn-outline-secondary ms-2">View History</a>
+    </div>
+</div>
+{% endblock %}

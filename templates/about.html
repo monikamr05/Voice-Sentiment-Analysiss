@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}About - Voice Sentiment Analysis{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h1 class="mb-4">About This Project</h1>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h4>Overview</h4>
+                    <p>
+                        This web application performs <strong>AI-based voice call sentiment analysis</strong>
+                        using deep learning. Speech audio is analyzed to detect emotions, which are then
+                        mapped to Positive, Neutral, or Negative sentiment categories.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5><i class="bi bi-database text-primary"></i> Dataset</h5>
+                            <p class="text-muted">
+                                Trained on the <strong>RAVDESS</strong> (Ryerson Audio-Visual Database of
+                                Emotional Speech and Song) dataset. Emotion labels are parsed automatically
+                                from filenames.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5><i class="bi bi-sliders text-success"></i> Features</h5>
+                            <ul class="text-muted">
+                                <li>MFCC (40 coefficients)</li>
+                                <li>Chroma (12 bins)</li>
+                                <li>Mel Spectrogram (40 pooled bands)</li>
+                                <li>Zero Crossing Rate</li>
+                                <li>RMS Energy</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5><i class="bi bi-diagram-3 text-info"></i> Model</h5>
+                            <p class="text-muted">
+                                1D Convolutional Neural Network (CNN) built with TensorFlow/Keras.
+                                Architecture: Conv1D → BatchNorm → Pooling → GlobalAveragePooling → Dense.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5><i class="bi bi-stack text-warning"></i> Tech Stack</h5>
+                            <p class="text-muted mb-0">
+                                Python, Flask, TensorFlow, Librosa, scikit-learn, Bootstrap 5,
+                                Chart.js, SQLite, ReportLab (PDF reports).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Project Structure</h4>
+            <pre class="bg-dark text-light p-3 rounded small"><code>voice_sentiment_analysis/
+├── app.py              # Flask web server
+├── train_model.py      # Model training pipeline
+├── predict.py          # Inference utilities
+├── audio_features.py   # Librosa feature extraction
+├── config.py           # Settings & mappings
+├── database.py         # SQLite integration
+├── dataset/            # RAVDESS audio files
+├── saved_model/        # model.h5 & artifacts
+├── static/             # CSS, JS, uploads, plots
+└── templates/          # HTML pages</code></pre>
+
+            <h4 class="mt-4">Setup</h4>
+            <ol>
+                <li><code>pip install -r requirements.txt</code></li>
+                <li>Download RAVDESS and extract into <code>dataset/</code></li>
+                <li><code>python train_model.py</code></li>
+                <li><code>python app.py</code></li>
+            </ol>
+        </div>
+    </div>
+</div>
+{% endblock %}
