@@ -1,7 +1,7 @@
-# Web Framework
+# Web Framework & Production Server
+gunicorn
 flask>=3.0.0
 werkzeug>=3.0.0
-gunicorn>=21.0.0
 
 # Audio Processing
 librosa>=0.10.0
@@ -17,7 +17,3 @@ h5py>=3.8.0
 # Visualization & Reporting
 matplotlib>=3.7.0
 reportlab>=4.0.0
-
-# Optional: only needed to train the model locally (python train_model.py)
-# tensorflow>=2.15.0
-# seaborn>=0.13.0
