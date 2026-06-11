@@ -1,0 +1,16 @@
+# Voice Sentiment Analysis — runtime dependencies (Windows-safe inference)
+flask>=3.0.0
+werkzeug>=3.0.0
+reportlab>=4.0.0
+numpy>=1.24.0,<2.0.0
+scipy>=1.11.0
+scikit-learn>=1.3.0
+librosa>=0.10.0
+soundfile>=0.12.0
+audioread>=3.0.0
+matplotlib>=3.7.0
+h5py>=3.8.0
+
+# Optional: only needed to train the model (python train_model.py)
+# tensorflow>=2.15.0
+# seaborn>=0.13.0
