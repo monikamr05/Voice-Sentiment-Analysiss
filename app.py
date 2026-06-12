@@ -58,7 +58,7 @@ from predict import (
     warmup_model,
 )
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), 'templates'))
 app.secret_key = os.environ.get("SECRET_KEY", "voice-sentiment-dev-key-change-in-production")
 app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_SIZE_MB * 1024 * 1024
 app.config["PERMANENT_SESSION_LIFETIME"] = 86400 * 7
