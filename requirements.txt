@@ -2,6 +2,12 @@ gunicorn
 flask>=3.0.0
 werkzeug>=3.0.0
 
+numpy==1.26.4
+numba==0.59.1
+librosa==0.10.1
+scipy==1.11.4
+
+
 # Audio Processing
 librosa>=0.10.0
 soundfile>=0.12.0
