@@ -82,7 +82,7 @@ This will:
 python app.py
 ```
 
-Open **http://localhost:5000** in your browser.
+Open https://voice-sentiment-analysiss--monikamca25.replit.app in your browser.
 
 ## Usage
 
